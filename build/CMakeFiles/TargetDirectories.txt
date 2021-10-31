@@ -1,3 +1,0 @@
-/Users/vic/Projects/PiccoloCLI/build/CMakeFiles/rebuild_cache.dir
-/Users/vic/Projects/PiccoloCLI/build/CMakeFiles/edit_cache.dir
-/Users/vic/Projects/PiccoloCLI/build/CMakeFiles/piccolo.dir
