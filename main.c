@@ -18,8 +18,10 @@ int main(int argc, const char** argv) {
     piccolo_addTimeLib(&engine);
 
     struct piccolo_Package* package = piccolo_loadPackage(&engine, argv[1]);
-
-    if(!piccolo_executePackage(&engine, package)) {
+    if(package->compilationError) {
+        piccolo_freeEngine(&engine);
+        return -1;
+    } else if(!piccolo_executePackage(&engine, package)) {
         piccolo_enginePrintError(&engine, "Runtime error.\n");
     }
 
