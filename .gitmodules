@@ -1,0 +1,3 @@
+[submodule "piccolo"]
+	path = piccolo
+	url = https://github.com/PiccoloLang/piccolo.git

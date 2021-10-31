@@ -1,0 +1,13 @@
+
+var io = import 'io'
+
+for n in 1..101 {
+    var msg = ''
+    if n % 3 == 0
+        msg = msg + 'Fizz'
+    if n % 5 == 0
+        msg = msg + 'Buzz'
+    if msg == ''
+        msg = n
+    io.print(msg)
+}

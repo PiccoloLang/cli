@@ -1,0 +1,19 @@
+
+var reduce = fn reducer, base -> {
+    fn arr -> {
+        var result = base
+        for x in arr
+            result = reducer(result, x)
+        result
+    }
+}
+
+var filter = fn predicate -> {
+    fn arr -> {
+        var result = []
+        for x in arr
+            if predicate(x)
+                result = result + [x]
+        result
+    }
+}
