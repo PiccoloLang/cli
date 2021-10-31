@@ -1,5 +1,5 @@
 
-<img src="branding/logo.png" align="left" width="128px"/>
+<img src="piccolo/branding/logo.png" align="left" width="128px"/>
 
 # Piccolo programming language
 
