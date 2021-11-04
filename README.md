@@ -21,16 +21,8 @@ piccolo path/to/code.pic
 ### Unix
 
 To build on Unix, you will need CMake and Make installed.
-Clone this repo recursively run the following commands from its root:
-
-```shell
-mkdir build
-cd build
-cmake ..
-make
-```
-
-You can now enjoy the Piccolo CLI.
+Clone this repo recursively and run build.sh. The compiled CLI
+will be put in the `build/` directory.
 
 ### Windows
 

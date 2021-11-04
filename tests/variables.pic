@@ -1,0 +1,43 @@
+
+var debug = import 'debug'
+var io = import 'io'
+
+io.print('VARIABLE TESTS')
+io.print('==============')
+
+# declarations
+
+var x = 5
+var y = 6
+var z = 7
+debug.assert(x == 5)
+debug.assert(y == 6)
+debug.assert(z == 7)
+
+{
+    var a = 33
+    debug.assert(a == 33)
+    {
+        var b = 54
+        debug.assert(b == 54)
+        debug.assert(a == 33)
+
+        a = 99
+    }
+    debug.assert(a == 99)
+}
+
+# assignments
+
+debug.assert((x = 6) == 6)
+debug.assert(x == 6)
+
+# usage
+
+var a = x * y + 2
+debug.assert(a == 38)
+
+debug.assert((a = a + 3) == 41)
+debug.assert(a == 41)
+
+io.print()

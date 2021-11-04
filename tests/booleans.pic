@@ -1,0 +1,40 @@
+
+var debug = import 'debug'
+var io = import 'io'
+
+io.print('BOOLEAN TESTS')
+io.print('=============')
+
+# basic
+debug.assert(true)
+debug.assert(!false)
+debug.assert(true == true)
+debug.assert(false == false)
+debug.assert(nil == nil)
+
+# and
+debug.assert(true and true)
+debug.assert(!(true and false))
+debug.assert(!(false and true))
+debug.assert(!(false and false))
+
+# or
+debug.assert(true or true)
+debug.assert(true or false)
+debug.assert(false or true)
+debug.assert(!(false or false))
+
+# short circuiting
+var mySideEffect = false
+debug.assert(true and (mySideEffect = true))
+debug.assert(mySideEffect)
+
+mySideEffect = false
+debug.assert(false or (mySideEffect = true))
+debug.assert(mySideEffect)
+
+# precedence
+debug.assert(false or false or true)
+debug.assert(!(false and true or false))
+
+io.print()

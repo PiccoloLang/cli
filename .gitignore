@@ -4,3 +4,4 @@ cmake-build-release/
 .idea
 build/
 examples/test.pic
+examples/test2.pic

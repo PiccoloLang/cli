@@ -1,0 +1,17 @@
+
+var debug = import 'debug'
+var io = import 'io'
+
+io.print('STRING TESTS')
+io.print('============')
+
+# equality
+debug.assert('hello' == 'hello')
+debug.assert(!('hello' == 'world'))
+
+# operations
+debug.assert('hello' + 'world' == 'helloworld')
+debug.assert('a' * 5 == 'aaaaa')
+debug.assert(5 * 'a' == 'aaaaa')
+
+io.print()

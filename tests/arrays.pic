@@ -1,0 +1,29 @@
+
+var debug = import 'debug'
+var io = import 'io'
+
+io.print('ARRAY TESTS')
+io.print('===========')
+
+# literals and basic indexing
+
+debug.assert([0, 1, 2, 3, 4][0] == 0)
+debug.assert([0, 1, 2, 3, 4][1] == 1)
+debug.assert([0, 1, 2, 3, 4][2] == 2)
+debug.assert([0, 1, 2, 3, 4][3] == 3)
+debug.assert([0, 1, 2, 3, 4][4] == 4)
+
+# assignment
+
+var myFavArray = [3.14, 42, 64]
+debug.assert(myFavArray[1] == 42)
+debug.assert((myFavArray[1] = 123) == 123)
+debug.assert(myFavArray[1] == 123)
+
+# ranges
+
+debug.assert(0..100[0] == 0)
+debug.assert(0..100[50] == 50)
+debug.assert(10..20[3] == 13)
+
+io.print()

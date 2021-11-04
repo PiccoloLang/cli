@@ -44,9 +44,6 @@ int main(int argc, const char** argv) {
         return -1;
     }
 
-    if(debug) {
-        piccolo_disassembleBytecode(&package->bytecode);
-    }
     if(!piccolo_executePackage(&engine, package)) {
         piccolo_enginePrintError(&engine, "Runtime error.\n");
     }

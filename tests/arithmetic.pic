@@ -1,0 +1,32 @@
+
+var debug = import 'debug'
+var io = import 'io'
+
+io.print('ARITHMETIC TESTS')
+io.print('================')
+
+# literals and equality
+debug.assert(3 == 3)
+debug.assert(5 == 5)
+debug.assert(1.2 == 1.2)
+debug.assert(!(2 == 3))
+
+# basic arithmetic
+debug.assert(1 + 1 == 2)
+debug.assert(3 - 2 == 1)
+debug.assert(5 * 5 == 25)
+debug.assert(15 / 5 == 3)
+debug.assert(4 % 3 == 1)
+debug.assert(-2 * -2 == 4)
+debug.assert(1 + 1 + 1 + 1 + 1 + 1 + 1 == 7)
+
+# precedence
+debug.assert(2 + 3 * 5 == 17)
+debug.assert((2 + 3) * 5 == 25)
+debug.assert(1 * 3 + 2 * 2 == 7)
+debug.assert(1 * (3 + 2) * 2 == 10)
+debug.assert(3 + 5 / 2 == 5.5)
+debug.assert((3 + 5) / 2 == 4)
+debug.assert((3 + 5) % 2 == 0)
+
+io.print()

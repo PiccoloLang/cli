@@ -1,0 +1,39 @@
+
+var debug = import 'debug'
+var io = import 'io'
+
+io.print('WHILE TESTS')
+io.print('===========')
+
+# basic
+
+var a = 0
+while a < 5
+    a = a + 1
+debug.assert(a == 5)
+
+a = 0
+while a == 0
+    a = a + 1
+debug.assert(a == 1)
+
+a = 0
+while a > 5
+    a = a + 1
+debug.assert(a == 0)
+
+# evaluation
+
+var test = fn n -> {
+    a = 0
+    var myArr = while a < n {
+        a = a + 1
+        2 * a
+    }
+    var result = [2, 4, 6, 8, 10]
+    for i in 0..n
+        debug.assert(myArr[i] == result[i])
+}
+test(5)
+
+io.print()
