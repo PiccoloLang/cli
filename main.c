@@ -20,21 +20,21 @@ typedef enum {
 
 typedef void (*cli_argHandler)(const cli_argType, const size_t, const char* const restrict, void* const restrict);
 
-void cli_parseArgs(const int argc, const char* const restrict* restrict const argv, const cli_argHandler handler, const size_t n_short_args, const char* restrict short_args, const size_t n_long_args, const char* const restrict* const restrict long_args, void* const restrict passthrough) {
+void cli_parseArgs(const int argc, const char* const restrict* restrict const argv, const cli_argHandler handler, const size_t nShortArgs, const char* restrict shortArgs, const size_t nLongArgs, const char* const restrict* const restrict longArgs, void* const restrict passthrough) {
 	if(!argc) return;
 	if(!argv) return;
 	if(argc < 0) return;
 	if(!handler) return;
-	if(n_short_args && !short_args) return;
-	if(n_long_args && !long_args) return;
+	if(nShortArgs && !shortArgs) return;
+	if(nLongArgs && !longArgs) return;
 
 	// Precalculating the long args' lengths to save time while looping
 	// We need this weirdness to avoid creating a zero-length VLA
-	size_t long_arg_lens[n_long_args ? n_long_args : 1];
-	if(n_long_args) {
-		for(register size_t i = 0; i < n_long_args; ++i) {
-			long_arg_lens[i] = 0;
-			while(long_args[i][long_arg_lens[i]]) long_arg_lens[i]++;
+	size_t longArgLens[nLongArgs ? nLongArgs : 1];
+	if(nLongArgs) {
+		for(register size_t i = 0; i < nLongArgs; ++i) {
+			longArgLens[i] = 0;
+			while(longArgs[i][longArgLens[i]]) longArgLens[i]++;
 		}
 	}
 
@@ -46,28 +46,28 @@ void cli_parseArgs(const int argc, const char* const restrict* restrict const ar
 		const char* value = NULL;
 
 		if(arg[0] == '-') {
-			if(arg[1] == '-' && n_long_args) {
+			if(arg[1] == '-' && nLongArgs) {
 				type = CLI_ARG_LONG;
-				for(register size_t j = 0; j < n_long_args; ++j) {
-					const size_t arg_len = long_arg_lens[j];
+				for(register size_t j = 0; j < nLongArgs; ++j) {
+					const size_t argLen = longArgLens[j];
 
 					// Calculating inline like this might be very slightly faster
 					// given the specific use-case
-					for(register size_t k = 0; k < arg_len; ++k) {
-						if(long_args[j][k] != arg[k + 2]) goto long_arg_continue;
+					for(register size_t k = 0; k < argLen; ++k) {
+						if(longArgs[j][k] != arg[k + 2]) goto longArgContinue;
 					}
 
 					argn = j;
-					if(arg[arg_len + 2]) value = arg + 2 + arg_len + 1;
+					if(arg[argLen + 2]) value = arg + 2 + argLen + 1;
 
-				long_arg_continue:
+				longArgContinue:
 					continue;
 				}
 			}
-			else if(n_short_args) {
+			else if(nShortArgs) {
 				type = CLI_ARG_SHORT;
-				for(register size_t j = 0; j < n_short_args; ++j) {
-					if(short_args[j] != arg[1]) continue;
+				for(register size_t j = 0; j < nShortArgs; ++j) {
+					if(shortArgs[j] != arg[1]) continue;
 
 					argn = j;
 
@@ -100,46 +100,46 @@ struct cli_argInfo {
 };
 
 // -f -b style args
-static char short_args[] = { 'd' };
+static char shortArgs[] = { 'd' };
 // --fizz --buzz style args
-static char* long_args[] = { "debug", "pkg-path" };
+static char* longArgs[] = { "debug", "pkg-path" };
 
-static void handler(const cli_argType type, const size_t n_arg, const char* const restrict arg, void* const restrict passthrough) {
-    struct cli_argInfo* const arg_info = passthrough;
+static void handler(const cli_argType type, const size_t nArg, const char* const restrict arg, void* const restrict passthrough) {
+    struct cli_argInfo* const argInfo = passthrough;
 
     switch(type) {
         case CLI_ARG_SHORT: {
-            if(n_arg == 0) arg_info->debug = true;
+            if(nArg == 0) argInfo->debug = true;
             break;
         }
         case CLI_ARG_LONG: {
-            if(n_arg == 0) arg_info->debug = true;
-            else if(n_arg == 1) arg_info->path = arg;
+            if(nArg == 0) argInfo->debug = true;
+            else if(nArg == 1) argInfo->path = arg;
             break;
         }
         case CLI_ARG_RAW: {
-            if(arg_info->package) {
+            if(argInfo->package) {
                 fprintf(stderr, "Passing multiple packages is not supported");
                 exit(EXIT_FAILURE);
             }
-            arg_info->package = arg;
+            argInfo->package = arg;
             break;
         }
     }
 }
 
 int main(int argc, const char** argv) {
-    struct cli_argInfo arg_info = { 0 };
-    cli_parseArgs(argc, argv, handler, sizeof(short_args) / sizeof(short_args[0]), short_args, sizeof(long_args) / sizeof(long_args[0]), long_args, &arg_info);
+    struct cli_argInfo argInfo = { 0 };
+    cli_parseArgs(argc, argv, handler, sizeof(shortArgs) / sizeof(shortArgs[0]), shortArgs, sizeof(longArgs) / sizeof(longArgs[0]), longArgs, &argInfo);
 
-    if(arg_info.debug) {
-        printf("Package = %s\n", arg_info.package);
-        printf("Debug = %s\n", arg_info.debug ? "true" : "false");
-        printf("Search Path = %s\n", arg_info.path);
+    if(argInfo.debug) {
+        printf("Package = %s\n", argInfo.package);
+        printf("Debug = %s\n", argInfo.debug ? "true" : "false");
+        printf("Search Path = %s\n", argInfo.path);
         
     }
 
-    if(!arg_info.package) {
+    if(!argInfo.package) {
         fprintf(stderr, "Usage: %s [filename]\n", argv[0]);
         return EXIT_FAILURE;
     }
@@ -148,9 +148,9 @@ int main(int argc, const char** argv) {
     piccolo_initEngine(&engine, printError);
     piccolo_addIOLib(&engine);
     piccolo_addTimeLib(&engine);
-    if(arg_info.debug) piccolo_addDebugLib(&engine);
+    if(argInfo.debug) piccolo_addDebugLib(&engine);
 
-    struct piccolo_Package* package = piccolo_loadPackage(&engine, arg_info.package);
+    struct piccolo_Package* package = piccolo_loadPackage(&engine, argInfo.package);
     if(package->compilationError) {
         piccolo_freeEngine(&engine);
         return EXIT_FAILURE;
