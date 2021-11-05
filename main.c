@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define PICCOLO_ENABLE_DEBUG_LIB
 
@@ -117,6 +118,10 @@ static void handler(const cli_argType type, const size_t n_arg, const char* cons
             break;
         }
         case CLI_ARG_RAW: {
+            if(arg_info->package) {
+                fprintf(stderr, "Passing multiple packages is not supported");
+                exit(EXIT_FAILURE);
+            }
             arg_info->package = arg;
             break;
         }
@@ -136,7 +141,7 @@ int main(int argc, const char** argv) {
 
     if(!arg_info.package) {
         fprintf(stderr, "Usage: %s [filename]\n", argv[0]);
-        return 1;
+        return EXIT_FAILURE;
     }
 
     struct piccolo_Engine engine;
@@ -148,7 +153,7 @@ int main(int argc, const char** argv) {
     struct piccolo_Package* package = piccolo_loadPackage(&engine, arg_info.package);
     if(package->compilationError) {
         piccolo_freeEngine(&engine);
-        return -1;
+        return EXIT_FAILURE;
     }
 
     if(!piccolo_executePackage(&engine, package)) {
@@ -157,5 +162,5 @@ int main(int argc, const char** argv) {
 
     piccolo_freeEngine(&engine);
 
-    return 0;
+    return EXIT_SUCCESS;
 }
