@@ -12,7 +12,7 @@ var newline = '
 
 # pure functional part
 
-var boardToStr = fn board -> {
+fn boardToStr(board) {
     var rowStrs = for y in 0..h {
         var row = for x in 0..w {
             if board[x][y] == 1
@@ -25,13 +25,13 @@ var boardToStr = fn board -> {
     func.reduce(fn prev, new -> prev + new + newline, '')(rowStrs)
 }
 
-var getCell = fn board, x, y ->
+fn getCell(board, x, y)
     if x >= 0 and x < w and y >= 0 and y < h
         board[x][y]
     else
         0
 
-var getNeighbourCount = fn board, x, y ->
+fn getNeighbourCount(board, x, y)
     getCell(board, x - 1, y - 1) +
     getCell(board, x, y - 1) +
     getCell(board, x + 1, y - 1) +
@@ -41,7 +41,7 @@ var getNeighbourCount = fn board, x, y ->
     getCell(board, x - 1, y + 1) +
     getCell(board, x - 1, y)
 
-var getNextState = fn board, x, y -> {
+fn getNextState(board, x, y) {
     var neighbours = getNeighbourCount(board, x, y)
     var alive = if getCell(board, x, y) == 1
                     neighbours == 2 or neighbours == 3
@@ -50,7 +50,7 @@ var getNextState = fn board, x, y -> {
     if alive 1 else 0
 }
 
-var getNextBoard = fn board ->
+fn getNextBoard(board)
     for x in 0..w
         for y in 0..h
             getNextState(board, x, y)
