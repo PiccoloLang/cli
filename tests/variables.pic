@@ -15,16 +15,16 @@ debug.assert(y == 6)
 debug.assert(z == 7)
 
 {
-    var a = 33
-    debug.assert(a == 33)
+    var hello = 33
+    debug.assert(hello == 33)
     {
-        var b = 54
-        debug.assert(b == 54)
-        debug.assert(a == 33)
+        var world = 54
+        debug.assert(world == 54)
+        debug.assert(hello == 33)
 
-        a = 99
+        hello = 99
     }
-    debug.assert(a == 99)
+    debug.assert(hello == 99)
 }
 
 # assignments

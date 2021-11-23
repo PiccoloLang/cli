@@ -1,11 +1,14 @@
 #! piccolo
 
 import 'io' as io
+import 'time' as time
 import 'debug' as debug
 
 io.print('PICCOLO TEST SUITE')
 io.print('==================')
 io.print()
+
+const testsStart = time.clock()
 
 import 'booleans.pic'
 import 'arithmetic.pic'
@@ -17,4 +20,7 @@ import 'functions.pic'
 import 'while.pic'
 import 'for.pic'
 
+const testsEnd = time.clock()
+
 debug.printAssertionResults()
+io.print('Tests completed in', testsEnd - testsStart, 's')
