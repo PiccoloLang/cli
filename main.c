@@ -35,6 +35,7 @@ int main(int argc, const char** argv) {
     piccolo_initEngine(&engine, printError);
     piccolo_addIOLib(&engine);
     piccolo_addTimeLib(&engine);
+    piccolo_addMathLib(&engine);
     if(debug)
         piccolo_addDebugLib(&engine);
 
