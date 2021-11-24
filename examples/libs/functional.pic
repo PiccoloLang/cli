@@ -1,5 +1,5 @@
 
-var reduce = fn reducer, base -> {
+const reduce = fn reducer, base -> {
     fn arr -> {
         var result = base
         for x in arr
@@ -8,7 +8,7 @@ var reduce = fn reducer, base -> {
     }
 }
 
-var filter = fn predicate -> {
+const filter = fn predicate -> {
     fn arr -> {
         var result = []
         for x in arr

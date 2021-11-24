@@ -1,0 +1,40 @@
+
+import 'io' as io
+import 'libs/functional.pic' as func
+import 'math' as math
+
+const w = 50
+const h = 25
+const yMax = 5
+const newline = '
+'
+
+const function = fn x -> 0.5 * x + math.sin(x)
+
+const generateColumn = fn left, right -> {
+    const leftY = function(left)
+    const scaledLeftY = math.map(leftY, -yMax, yMax, h, 0)
+    const rightY = function(right)
+    const scaledRightY = math.map(rightY, -yMax, yMax, h, 0)
+    for y in 0..h
+        if (y >= scaledLeftY and y <= scaledRightY) or (y <= scaledLeftY and y >= scaledRightY)
+            '#'
+        else
+            '.'
+}
+
+const generateGraph = fn -> {
+    const xMax = (w / h) * yMax
+    const cols = for x in 0..w {
+        const left = math.map(x, 0, w, -xMax, xMax)
+        const right = math.map(x + 1, 0, w, -xMax, xMax)
+        generateColumn(left, right)
+    }
+    const rowStrings = func.reduce(fn prev, new -> {
+        for i in 0..h
+            prev[i] + new[i] + ' '
+    }, [''] * h)(cols)
+    func.reduce(fn prev, new -> prev + new + newline, '')(rowStrings)
+}
+
+io.print(generateGraph())

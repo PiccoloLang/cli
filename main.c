@@ -148,7 +148,9 @@ int main(int argc, const char** argv) {
     piccolo_initEngine(&engine, printError);
     piccolo_addIOLib(&engine);
     piccolo_addTimeLib(&engine);
-    if(argInfo.debug) piccolo_addDebugLib(&engine);
+    piccolo_addMathLib(&engine);
+    if(argInfo.debug)
+        piccolo_addDebugLib(&engine);
 
     struct piccolo_Package* package = piccolo_loadPackage(&engine, argInfo.package);
     if(package->compilationError) {

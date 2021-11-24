@@ -25,13 +25,13 @@ debug.assert(x == 6)
 
 # returning
 
-var add = fn a, b -> a + b
+const add = fn a, b -> a + b
 debug.assert(add(1, 1) == 2)
 debug.assert(add(4, 5) == 9)
 
 # closures
 
-var outer = fn -> {
+const outer = fn -> {
     var q = 5
     var inner = fn -> {
         debug.assert(q == 5)
@@ -42,10 +42,10 @@ var outer = fn -> {
 }
 outer()
 
-var makeFun = fn q -> fn -> q
+const makeFun = fn q -> fn -> q
 debug.assert(makeFun(4)() == 4)
 
-var outerrrr = fn -> {
+const outerrrr = fn -> {
     var p = 1
     var q = 2
     var r = 3
@@ -64,7 +64,7 @@ var outerrrr = fn -> {
 }
 outerrrr()
 
-var loops = fn -> {
+const loops = fn -> {
     var t = 0
     while t < 5 {
         t = t + 1
@@ -74,5 +74,28 @@ var loops = fn -> {
     debug.assert(t == 10)
 }
 loops()
+
+const funTimesInPiccolo = fn -> {
+    var e = 42
+    const fun = fn -> e
+    e = 35
+    debug.assert(fun() == 35)
+    e = 45
+    debug.assert(fun() == 45)
+}
+funTimesInPiccolo()
+
+const closuresArentFunToCode = fn -> {
+    var result = nil
+    {
+        const variable = 55
+        result = fn -> variable
+    }
+    {
+        const variable = 99
+    }
+    result
+}
+debug.assert(closuresArentFunToCode()() == 55)
 
 io.print()
