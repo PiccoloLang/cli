@@ -1,0 +1,24 @@
+
+import 'io' as io
+import 'debug' as debug
+
+io.print('HASHMAP TESTS')
+io.print('=============')
+
+const x = {
+    'hello': 'world',
+    1: 2,
+    true: 4,
+    false: 99,
+    'hello' + 'world': 88
+}
+
+debug.assert(x.hello == 'world')
+debug.assert(x['hello'] == 'world')
+debug.assert(x[1] == 2)
+debug.assert(x[true] == 4)
+debug.assert(x[false] == 99)
+debug.assert(x['helloworld'] == 88)
+
+x[3] = 4
+debug.assert(x[3] == 4)
