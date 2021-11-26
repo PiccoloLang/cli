@@ -1,0 +1,12 @@
+
+import 'io' as io
+
+const fizzbuzz = fn n ->
+    [
+        ['Fizzbuzz', 'Fizz', 'Fizz', 'Fizz', 'Fizz'],
+        ['Buzz',     n,      n,      n,      n],
+        ['Buzz',     n,      n,      n,      n]
+    ][n % 3][n % 5]
+
+for i in 1..101
+    io.print(fizzbuzz(i))
