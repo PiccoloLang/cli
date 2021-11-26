@@ -1,0 +1,82 @@
+
+import 'io' as io
+import 'time' as time
+import 'math' as math
+import 'random' as random
+import 'libs/functional.pic' as func
+
+const Particle = fn x, y -> {
+    var self = nil
+    self = {
+        'x': x,
+        'y': y,
+        'initX': x,
+        'initY': y,
+        'vx': math.map(random.val(), 0, 1, -2, 2),
+        'vy': math.map(random.val(), 0, 1, -2, 2),
+        'update': fn dt -> {
+            self.x = self.x + dt * self.vx
+            self.y = self.y + dt * self.vy
+            
+            self.vy = self.vy - dt * 2
+
+            # Force to pull particles closer to the center
+            self.vx = self.vx + 0.25 * dt * (5 - self.x)
+
+            if !self.isInsideBounds()
+                self.reset()
+        },
+        'isInsideBounds': fn -> self.x >= 0 and self.x < w and self.y >= 0 and self.y < h,
+        'reset': fn -> {
+            self.x = self.initX
+            self.y = self.initY
+            self.vx = math.map(random.val(), 0, 1, -2, 2)
+            self.vy = math.map(random.val(), 0, 1, -2, 2)
+        }
+    }
+}
+
+const w = 10
+const h = 20
+
+var particles = []
+const timestep = 0.015
+
+const newline = '
+'
+const shades = [' ', '░', '▒', '▓', '█']
+
+const particleString = fn -> {
+    const map = for x in 0..w for y in 0..h 0
+    for p in particles
+        if p.isInsideBounds()
+            map[p.x][p.y] = map[p.x][p.y] + 1
+    for x in 0..w
+        for y in 0..h
+            map[x][y] = math.min(map[x][y], 4)
+    
+    func.reduce(fn prev, next -> prev + next + newline, '')(
+        for y in 0..h
+            func.reduce(fn prev, next -> prev + next, '')(
+                for x in 0..w shades[map[x][y]]
+            )
+    )
+}
+
+var toAdd = 80
+var frame = 0
+while true {
+    if toAdd > 0 and (frame % 3 == 0) {
+        particles = particles + [Particle(w / 2, 3 * h / 4)]
+        toAdd = toAdd - 1
+    }
+
+    for p in particles {
+        p.update(timestep)
+    }
+
+    frame = frame + 1
+
+    io.print(particleString())
+    time.sleep(timestep)
+}

@@ -149,6 +149,7 @@ int main(int argc, const char** argv) {
     piccolo_addIOLib(&engine);
     piccolo_addTimeLib(&engine);
     piccolo_addMathLib(&engine);
+    piccolo_addRandomLib(&engine);
     if(argInfo.debug)
         piccolo_addDebugLib(&engine);
 
