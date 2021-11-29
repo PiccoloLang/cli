@@ -28,6 +28,10 @@ will be put in the `build/` directory.
 
 Todo
 
+### Contributing
+
+A year of piccolo experience is required to join the piccolo dev team.
+
 ### Credits
 
 Main programming - Nikos Plugachev
