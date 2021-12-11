@@ -5,8 +5,9 @@
 #define PICCOLO_ENABLE_DEBUG_LIB
 
 #include "piccolo/include.h"
-#include "piccolo/stdlib/stdlib.h"
+#include "piccolo/stdlib/picStdlib.h"
 #include "piccolo/debug/disassembler.h"
+#include "debugLib.h"
 
 void printError(const char* format, va_list args) {
     vfprintf(stderr, format, args);
