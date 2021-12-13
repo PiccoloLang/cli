@@ -1,0 +1,164 @@
+
+import 'io' as io
+import 'math' as math
+import 'random' as random
+import 'libs/functional.pic' as func
+
+# board printing
+const digits = '0123456789'
+const numToStr = fn n -> {
+    if n == 0
+        ''
+    else
+        numToStr(math.floor(n / 10)) + digits[n % 10]
+}
+
+const cellColors = {
+    2: '░',
+    4: '░',
+    8: '░',
+    16: '▒',
+    32: '▒',
+    64: '▒',
+    128: '▓',
+    256: '▓',
+    512: '▓',
+    1024: '█',
+    2048: '█'
+}
+
+const cellStrWidth = 8
+const cellStrHeight = 5
+const cellStrRows = fn val ->
+    if val == 0 {
+        [' ' * cellStrWidth + '  '] * (cellStrHeight + 1)
+    } else {
+        const valStr = numToStr(val)
+        const cellColor = cellColors[val]
+        const rowsAboveNum = math.floor((cellStrHeight - 1) / 2)
+        const rowsBelowNum = cellStrHeight - 1 - rowsAboveNum
+        const colsRightNum = math.floor((cellStrWidth - valStr.length) / 2)
+        const colsLeftNum = cellStrWidth - valStr.length - colsRightNum
+
+        [cellColor * cellStrWidth + '  '] * rowsAboveNum +
+        [cellColor * colsLeftNum + valStr + cellColor * colsRightNum + '  '] +
+        [cellColor * cellStrWidth + '  '] * rowsBelowNum +
+        [' ' * cellStrWidth + '  ']
+    }
+
+const newline = '
+'
+const boardToStr = fn b -> {
+    const concatReducer = func.reduce(fn prev, new -> prev + new, '')
+    const newlineReducer = func.reduce(fn prev, new -> prev + new + newline, '')
+    const rows = for y in 0..b[0].length {
+        const row = for x in 0..b.length
+                        cellStrRows(b[x][y])
+        const rowStrs = func.reduce(fn prev, new -> 
+            for i in 0..(cellStrHeight + 1)
+                prev[i] + new[i]
+        , [''] * (cellStrHeight + 1))(row)
+        
+        newlineReducer(rowStrs)
+    }
+    concatReducer(rows)
+}
+
+# board move
+const compressRow = fn row, idx -> {
+    if idx == row.length
+        []
+    else if idx < row.length - 1 and row[idx] == row[idx + 1]
+        [2 * row[idx]] + compressRow(row, idx + 2)
+    else
+        [row[idx]] + compressRow(row, idx + 1)
+}
+
+const shiftRow = fn row -> {
+    const nonZero = func.filter(fn x -> x != 0)(row)
+    const nonZeroCompressed = compressRow(nonZero, 0)
+    nonZeroCompressed + [0] * (row.length - nonZeroCompressed.length)
+}
+
+const applyMove = fn b, move -> {
+    const w = b.length
+    const h = b[0].length
+    if move == 'a' {
+        const moved = for y in 0..h
+                            shiftRow(for x in 0..w b[x][y])
+        for x in 0..w
+            for y in 0..h
+                moved[y][x]
+    } else if move == 'd' {
+        const moved = for y in 0..h
+                            shiftRow(for x in 0..b.length b[w - 1 - x][y])
+        for x in 0..w
+            for y in 0..h
+                moved[y][w - 1 - x]
+    } else if move == 's' {
+        const moved = for x in 0..w
+                            shiftRow(for y in 0..h b[x][h - 1 - y])
+        for x in 0..w
+            for y in 0..h
+                moved[x][h - 1 - y]
+    } else if move == 'w' {
+        const moved = for x in 0..w
+                            shiftRow(for y in 0..h b[x][y])
+        for x in 0..w
+            for y in 0..h
+                moved[x][y]
+    }
+}
+
+# board utils
+const getEmptyCells = fn b -> {
+    const cells = for i in 0..(b.length * b[0].length)
+                        [i % b.length, math.floor(i / b.length), b[i % b.length][math.floor(i / b.length)]]
+    for cell in func.filter(fn c -> c[2] == 0)(cells)
+        [cell[0], cell[1]]
+}
+
+const boardEq = fn a, b -> {
+    const andReducer = func.reduce(fn prev, next -> prev and next, true)
+    const all = for x in 0..a.length {
+        const col = for y in 0..a[0].length
+            a[x][y] == b[x][y]
+        andReducer(col)
+    }
+    andReducer(all)
+}
+
+const boardDead = fn b -> {
+    const boardW = applyMove(b, 'w')
+    const boardA = applyMove(b, 'a')
+    const boardS = applyMove(b, 's')
+    const boardD = applyMove(b, 'd')
+    boardEq(b, boardW) and boardEq(b, boardA) and boardEq(b, boardS) and boardEq(b, boardD)
+}
+
+# side effect part
+var continue = true
+var board = for x in 0..4 for y in 0..4 0
+board[0][0] = 2
+
+io.print(boardToStr(board))
+
+while continue {
+    if boardDead(board) {
+        io.print('You lost!')
+        continue = false
+    } else {
+        io.print('Direction? [wasd]')
+        const dir = io.input()
+        if dir == 'w' or dir == 's' or
+        dir == 'a' or dir == 'd' {
+            board = applyMove(board, dir)
+            const emptyCells = getEmptyCells(board)
+            if emptyCells.length > 0 {
+                const chosenCell = emptyCells[random.val() * emptyCells.length]
+                board[chosenCell[0]][chosenCell[1]] = 2
+            }
+            io.print(boardToStr(board))
+        }
+    }
+}
