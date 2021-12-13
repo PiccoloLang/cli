@@ -12,10 +12,10 @@ var newline = '
 
 # pure functional part
 
-const boardToStr = fn board -> {
+const boardToStr = fn b -> {
     var rowStrs = for y in 0..h {
         var row = for x in 0..w {
-            if board[x][y] == 1
+            if b[x][y] == 1
                 '# '
             else
                 '. '
@@ -25,35 +25,35 @@ const boardToStr = fn board -> {
     func.reduce(fn prev, new -> prev + new + newline, '')(rowStrs)
 }
 
-const getCell = fn board, x, y ->
+const getCell = fn b, x, y ->
     if x >= 0 and x < w and y >= 0 and y < h
-        board[x][y]
+        b[x][y]
     else
         0
 
-const getNeighbourCount = fn board, x, y ->
-    getCell(board, x - 1, y - 1) +
-    getCell(board, x, y - 1) +
-    getCell(board, x + 1, y - 1) +
-    getCell(board, x + 1, y) +
-    getCell(board, x + 1, y + 1) +
-    getCell(board, x, y + 1) +
-    getCell(board, x - 1, y + 1) +
-    getCell(board, x - 1, y)
+const getNeighbourCount = fn b, x, y ->
+    getCell(b, x - 1, y - 1) +
+    getCell(b, x, y - 1) +
+    getCell(b, x + 1, y - 1) +
+    getCell(b, x + 1, y) +
+    getCell(b, x + 1, y + 1) +
+    getCell(b, x, y + 1) +
+    getCell(b, x - 1, y + 1) +
+    getCell(b, x - 1, y)
 
-const getNextState = fn board, x, y -> {
-    var neighbours = getNeighbourCount(board, x, y)
-    var alive = if getCell(board, x, y) == 1
+const getNextState = fn b, x, y -> {
+    var neighbours = getNeighbourCount(b, x, y)
+    var alive = if getCell(b, x, y) == 1
                     neighbours == 2 or neighbours == 3
                 else
                     neighbours == 3
     if alive 1 else 0
 }
 
-const getNextBoard = fn board ->
+const getNextBoard = fn b ->
     for x in 0..w
         for y in 0..h
-            getNextState(board, x, y)
+            getNextState(b, x, y)
 
 # side effect part
 var board = for x in 0..w for y in 0..h 0
