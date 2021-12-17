@@ -89,7 +89,7 @@ void cli_parseArgs(const int argc, const char* const restrict* restrict const ar
 		}
 
 		handler(type, argn, value, passthrough);
-	}
+}
 
     return;
 }
@@ -135,9 +135,8 @@ int main(int argc, const char** argv) {
 
     if(argInfo.debug) {
         printf("Package = %s\n", argInfo.package);
-        printf("Debug = %s\n", argInfo.debug ? "true" : "false");
+        printf("Debug = %s\n", argInfo.debug ? "true" : "false"); // this is redundant, but ok XD
         printf("Search Path = %s\n", argInfo.path);
-        
     }
 
     if(!argInfo.package) {
@@ -147,6 +146,8 @@ int main(int argc, const char** argv) {
 
     struct piccolo_Engine engine;
     piccolo_initEngine(&engine, printError);
+    if(argInfo.path != NULL)
+        piccolo_addSearchPath(&engine, argInfo.path);
     piccolo_addIOLib(&engine);
     piccolo_addTimeLib(&engine);
     piccolo_addMathLib(&engine);
