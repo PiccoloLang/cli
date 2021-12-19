@@ -97,7 +97,8 @@ void cli_parseArgs(const int argc, const char* const restrict* restrict const ar
 struct cli_argInfo {
     const char* package;
     bool debug;
-    const char* path;
+    size_t n_paths;
+    const char** paths;
 };
 
 // -f -b style args
@@ -115,7 +116,10 @@ static void handler(const cli_argType type, const size_t nArg, const char* const
         }
         case CLI_ARG_LONG: {
             if(nArg == 0) argInfo->debug = true;
-            else if(nArg == 1) argInfo->path = arg;
+            else if(nArg == 1) {
+                argInfo->paths = realloc(argInfo->paths, ++argInfo->n_paths * sizeof(char*));
+                argInfo->paths[argInfo->n_paths - 1] = arg;
+            }
             break;
         }
         case CLI_ARG_RAW: {
@@ -136,7 +140,9 @@ int main(int argc, const char** argv) {
     if(argInfo.debug) {
         printf("Package = %s\n", argInfo.package);
         printf("Debug = %s\n", argInfo.debug ? "true" : "false"); // this is redundant, but ok XD
-        printf("Search Path = %s\n", argInfo.path);
+        for(register size_t i = 0; i < argInfo.n_paths; ++i) {
+            printf("Search Path = %s\n", argInfo.paths[i]);
+        }
     }
 
     if(!argInfo.package) {
@@ -146,8 +152,9 @@ int main(int argc, const char** argv) {
 
     struct piccolo_Engine engine;
     piccolo_initEngine(&engine, printError);
-    if(argInfo.path != NULL)
-        piccolo_addSearchPath(&engine, argInfo.path);
+    for(register size_t i = 0; i < argInfo.n_paths; ++i) {
+        piccolo_addSearchPath(&engine, argInfo.paths[i]);
+    }
     piccolo_addIOLib(&engine);
     piccolo_addTimeLib(&engine);
     piccolo_addMathLib(&engine);
