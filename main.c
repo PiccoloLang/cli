@@ -40,7 +40,7 @@ void cli_parseArgs(const int argc, const char* const restrict* restrict const ar
 	}
 
 	for(register size_t i = 0; i < argc - 1; i++) {
-        const char const* arg = (argv + 1)[i];
+        const char* const /* const on wrong side of pointer */ arg = (argv + 1)[i];
 
 		cli_argType type;
 		size_t argn = SIZE_MAX;
@@ -101,10 +101,11 @@ struct cli_argInfo {
     const char** paths;
 };
 
+
 // -f -b style args
-static char shortArgs[] = { 'd' };
+static const /* We want this to exist in a constants section */ char shortArgs[] = { 'd' };
 // --fizz --buzz style args
-static char* longArgs[] = { "debug", "pkg-path" };
+static const /* We want this to exist in a constants section */ char* const longArgs[] = { "debug", "pkg-path" };
 
 static void handler(const cli_argType type, const size_t nArg, const char* const restrict arg, void* const restrict passthrough) {
     struct cli_argInfo* const argInfo = passthrough;
