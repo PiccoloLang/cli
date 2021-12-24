@@ -35,5 +35,5 @@ jobs:
 
     - name: Test
       working-directory: ${{github.workspace}}
-      run: ./tesh.sh
+      run: ls
       
