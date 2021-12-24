@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    -name: Get submodules
+    - name: Get submodules
       working-directory: ${{github.workspace}}
       run: git submodule update --init
 
