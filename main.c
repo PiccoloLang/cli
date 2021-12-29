@@ -2,8 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define PICCOLO_ENABLE_DEBUG_LIB
-
 #include "piccolo/include.h"
 #include "piccolo/stdlib/picStdlib.h"
 #include "piccolo/debug/disassembler.h"
@@ -160,6 +158,7 @@ int main(int argc, const char** argv) {
     piccolo_addTimeLib(&engine);
     piccolo_addMathLib(&engine);
     piccolo_addRandomLib(&engine);
+    piccolo_addFileLib(&engine);
     if(argInfo.debug)
         piccolo_addDebugLib(&engine);
 

@@ -5,4 +5,5 @@ cmake-build-release/
 build/
 examples/test.pic
 examples/test2.pic
+examples/test.txt
 .vscode/
