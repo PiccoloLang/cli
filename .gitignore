@@ -3,7 +3,5 @@ cmake-build-release/
 .DS_Store
 .idea
 build/
-examples/test.pic
-examples/test2.pic
-examples/test.txt
+examples/dev/
 .vscode/
