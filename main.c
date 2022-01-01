@@ -160,6 +160,7 @@ int main(int argc, const char** argv) {
     piccolo_addRandomLib(&engine);
     piccolo_addFileLib(&engine);
     piccolo_addDLLLib(&engine);
+    piccolo_addOSLib(&engine);
     if(argInfo.debug)
         piccolo_addDebugLib(&engine);
 
