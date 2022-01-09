@@ -158,6 +158,7 @@ int main(int argc, const char** argv) {
     piccolo_addTimeLib(&engine);
     piccolo_addMathLib(&engine);
     piccolo_addRandomLib(&engine);
+    piccolo_addStrLib(&engine);
     piccolo_addFileLib(&engine);
     piccolo_addDLLLib(&engine);
     piccolo_addOSLib(&engine);
