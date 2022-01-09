@@ -103,4 +103,26 @@ const sub = fn a, b ->
 
 debug.assert(sub(5, 3) == 2)
 
+const sharedVarTest = fn -> {
+    var sharedVar = 0
+
+    const fn1 = fn -> {
+        sharedVar = sharedVar + 1
+    }
+
+    const fn2 = fn -> {
+        sharedVar = sharedVar + 1
+    }
+
+    [fn1, fn2]
+}
+
+const sharedVarClosures = sharedVarTest()
+debug.assert(sharedVarClosures[0]() == 1)
+debug.assert(sharedVarClosures[0]() == 2)
+debug.assert(sharedVarClosures[0]() == 3)
+debug.assert(sharedVarClosures[1]() == 4)
+debug.assert(sharedVarClosures[1]() == 5)
+debug.assert(sharedVarClosures[0]() == 6)
+
 io.print()
