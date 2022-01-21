@@ -27,19 +27,11 @@ void cli_parseArgs(const int argc, const char* const restrict* restrict const ar
 	if(nShortArgs && !shortArgs) return;
 	if(nLongArgs && !longArgs) return;
 
-	// Precalculating the long args' lengths to save time while looping
-	// We need this weirdness to avoid creating a zero-length VLA
-	size_t longArgLens[nLongArgs ? nLongArgs : 1];
-	if(nLongArgs) {
-		for(register size_t i = 0; i < nLongArgs; ++i) {
-			longArgLens[i] = 0;
-			while(longArgs[i][longArgLens[i]]) longArgLens[i]++;
-		}
-	}
+	size_t* longArgLens = calloc(nLongArgs, sizeof(size_t));
+    for(register size_t i = 0; i < nLongArgs; ++i) while(longArgs[i][longArgLens[i]]) ++(longArgLens[i]);
 
-	for(register size_t i = 0; i < argc - 1; i++) {
-        const char* const /* const on wrong side of pointer */ arg = (argv + 1)[i];
-
+	for(register size_t i = 0; i < argc - 1; ++i) {
+        const char* const arg = (argv + 1)[i];
 		cli_argType type;
 		size_t argn = SIZE_MAX;
 		const char* value = NULL;
@@ -48,13 +40,12 @@ void cli_parseArgs(const int argc, const char* const restrict* restrict const ar
 			if(arg[1] == '-' && nLongArgs) {
 				type = CLI_ARG_LONG;
 				for(register size_t j = 0; j < nLongArgs; ++j) {
+                    const char* const longArg = longArgs[j];
 					const size_t argLen = longArgLens[j];
 
 					// Calculating inline like this might be very slightly faster
 					// given the specific use-case
-					for(register size_t k = 0; k < argLen; ++k) {
-						if(longArgs[j][k] != arg[k + 2]) goto longArgContinue;
-					}
+					for(register size_t k = 0; k < argLen; ++k) if(longArg[k] != arg[k + 2]) goto longArgContinue;
 
 					argn = j;
 					if(arg[argLen + 2]) value = arg + 2 + argLen + 1;
@@ -86,10 +77,11 @@ void cli_parseArgs(const int argc, const char* const restrict* restrict const ar
 			value = arg;
 		}
 
+		if(argn == SIZE_MAX) free(longArgLens);
 		handler(type, argn, value, passthrough);
-}
+	}
 
-    return;
+	free(longArgLens);
 }
 
 struct cli_argInfo {

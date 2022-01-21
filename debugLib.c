@@ -22,7 +22,7 @@ static piccolo_Value disassembleFunctionNative(struct piccolo_Engine* engine, in
 static int assertions = 0;
 static int assertionsMet = 0;
 
-static piccolo_Value assertNative(struct piccolo_Engine* engine, int argc, struct piccolo_Value* args) {
+static piccolo_Value assertNative(struct piccolo_Engine* engine, int argc, struct piccolo_Value* args, struct piccolo_Value self) {
     if(argc != 1) {
         piccolo_runtimeError(engine, "Wrong argument count.");
     } else {
