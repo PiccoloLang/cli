@@ -34,6 +34,5 @@ A year of piccolo experience is required to join the piccolo dev team.
 
 ### Credits
 
-Main programming - Nikos Plugachev
-
+Main programming - Nikos Plugachev, Emily Banerjee<br>
 Logo Design - Oliver Huang
