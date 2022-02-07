@@ -1,7 +1,6 @@
 
  - type parsing
  - str escape chars
- - add limits to type buffers
  - package manager from gh
    - custom engine fn ptr for pkg resolver
  - make piccolo work w/ emscripten
