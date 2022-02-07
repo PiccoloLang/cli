@@ -1,0 +1,16 @@
+
+ - type parsing
+ - str escape chars
+ - add limits to type buffers
+ - package manager from gh
+   - custom engine fn ptr for pkg resolver
+ - make piccolo work w/ emscripten
+ - make a piccolo nat pkg cmake template
+ - make tuples/ts like interfaces(call them structs maybe)
+ - put piccolo on homebrew, apt-get, etc
+ - test piccolo on windows
+ - add cli args nat pkg to cli
+ - make nat structs allow overloaded operators
+ - nat struct types somehow????
+ - add varargs
+    - add varargs to io.print typing
