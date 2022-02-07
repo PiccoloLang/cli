@@ -177,5 +177,9 @@ int main(int argc, const char** argv) {
 
     piccolo_freeEngine(&engine);
 
+    if(argInfo.debug) {
+        printf("Live memory: %lu\n", engine.liveMemory);
+    }
+
     return EXIT_SUCCESS;
 }
