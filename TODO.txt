@@ -1,10 +1,8 @@
 
  - type parsing
+ - FIX PKG PTRS! USE LINKED LIST!
  - str escape chars
- - package manager from gh
-   - custom engine fn ptr for pkg resolver
  - make piccolo work w/ emscripten
- - make a piccolo nat pkg cmake template
  - make tuples/ts like interfaces(call them structs maybe)
  - put piccolo on homebrew, apt-get, etc
  - test piccolo on windows
